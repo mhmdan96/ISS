@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "OperationView";
+}
+
+<h2>Operation</h2>
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js">
+
+
+
+</script>
+<script lang="ja" type="text/javascript">
+    function get() {
+        var input = {
+
+            
+            fromdate: "2014-02-22",
+            todate: "2018-05-20"
+        };
+        $.ajax({
+            //data: JSON.stringify(vendorName, voucherNB, invoiceNB,fromdate, todate),
+            data: JSON.stringify(input),
+            type: "POST",
+            url: "http://localhost:51097/api/values/Get",
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                debugger;
+                var myJsonObject = data;
+                //$.each(myJsonObject, function (i, mobj) {
+                //    $("#operationtbl").append('<tr><td width="50px">' + +
+                //        '</td><td width="50px">' + mobj.vendorName +
+                //        '</td><td width="50px">' + mobj.invoiceNB +
+                //        '</td>' + '</td><td width="50px">'
+                //        + (typeof mobj.voucherNB !== "undefined" ? mobj.voucherNB : '')
+                //        + '</td></tr>');
+
+                //});
+
+                var tr;
+                console.log(data);
+                for (var i = 0; i < data.length; i++) {
+                    tr = tr + "<tr>";
+                    tr = tr + "<td>" + data[i].vendorName + "</td>";
+                    tr = tr + "<td>" + data[i].invoiceNB + "</td>";
+                    tr = tr + "<td>" +  data[i].voucherNB  + "</td>";
+                    tr = tr + "</tr>";
+                }
+                $('#operationtbl').append(tr);
+
+            },
+            error: function (xhr) {
+                alert(xhr.responseText);
+            }
+        });
+
+    }
+
+    function set() {
+
+        var operationdetails =
+            {
+                vendorName: "ahmad",
+                invoiceNB: 1,
+                siteNB: 2,
+                scanDate: "2018-01-25",
+                //voucherNB=9,
+                //bankNB=99228833,
+                //paymentDueDate=5
+               
+                
+            };
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(operationdetails),
+            url: "http://localhost:51097/api/values/PostOP",
+            dataType: "json",
+
+        });
+
+    }
+
+
+    
+    
+
+    function put() {
+
+        var operation =
+            {
+                vendorName: "mahmoud",
+                siteNB: 3,
+                invoiceNB: 5,
+                scanDate: "2015-01-22"
+            };
+
+        var t = JSON.stringify(operation);
+        var id = 5;
+        alert(JSON.stringify(operation));
+        $.ajax({
+            url: 'http://localhost:51097/api/values/' + id,
+            type: "Put",
+            contentType: "application/json",
+            data: t,
+            dataType: "json",
+
+        });
+
+    }
+
+</script>
+@using (Html.BeginForm())
+{
+
+<div style="text-align:center;">
+
+    <table id="operationtbl"></table>
+    <input id="getbtn" type="button" onclick="get();" value="Get_Data" />
+    <input id="updatebtn" type="button" onclick="put();" value="Put_Data" />
+    <input id="setbtn" type="button" onclick="set();" value="Set_Data" />
+    
+</div>
+
+
+
+}
+
